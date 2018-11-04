@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_presentation/sample_1/cart_page.dart';
 import 'package:flutter_presentation/sample_1/model/CartModel.dart';
 import 'package:flutter_presentation/sample_1/model/Product.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -33,10 +34,21 @@ class Sample1Page extends StatelessWidget {
       model: CartModel(),
       child: Scaffold(
         appBar: new AppBar(
-          title: ScopedModelDescendant(builder: (context, _, CartModel cartModel) {
-            return Text("${cartModel.itemCount} items in cart");
-          }),
-          actions: <Widget>[IconButton(icon: Icon(Icons.shopping_cart), onPressed: () {})],
+          title: ScopedModelDescendant(
+              builder: (context, _, CartModel cartModel) {
+                return Text("${cartModel.itemCount} items in cart");
+              }),
+          leading: ScopedModelDescendant(
+              builder: (context, _, CartModel cartModel) {
+                return IconButton(
+                    icon: Icon(Icons.shopping_cart), onPressed: () {
+                  Navigator.of(context).push(
+                      new MaterialPageRoute(builder: (context) {
+                        return new CartPage(cartModel);
+                      }));
+                });
+              }
+          ),
         ),
         body: GridView.count(
           mainAxisSpacing: 10.0,
@@ -81,12 +93,12 @@ class Sample1Page extends StatelessWidget {
                     Expanded(
                       child: Center(
                           child: Text(
-                        '${product.price} \$',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.0,
-                        ),
-                      )),
+                            '${product.price} \$',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.0,
+                            ),
+                          )),
                     ),
                     Material(
                       child: ScopedModelDescendant(
