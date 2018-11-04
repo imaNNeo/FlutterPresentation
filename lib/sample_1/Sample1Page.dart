@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_presentation/sample_1/model/CartModel.dart';
 import 'package:flutter_presentation/sample_1/model/Product.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 final myColors = [
   Colors.red,
@@ -27,19 +29,25 @@ final List<Product> products = List.generate(14, (index) {
 class Sample1Page extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: new AppBar(
-        title: Text("Sample 1"),
-      ),
-      body: GridView.count(
-        mainAxisSpacing: 10.0,
-        crossAxisSpacing: 10.0,
-        padding: EdgeInsets.all(10.0),
-        crossAxisCount: 2,
-        children: List.generate(products.length, (index) {
-          Product product = products[index];
-          return productWidget(product);
-        }),
+    return ScopedModel(
+      model: CartModel(),
+      child: Scaffold(
+        appBar: new AppBar(
+          title: ScopedModelDescendant(builder: (context, _, CartModel cartModel) {
+            return Text("${cartModel.itemCount} items in cart");
+          }),
+          actions: <Widget>[IconButton(icon: Icon(Icons.shopping_cart), onPressed: () {})],
+        ),
+        body: GridView.count(
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
+          padding: EdgeInsets.all(10.0),
+          crossAxisCount: 2,
+          children: List.generate(products.length, (index) {
+            Product product = products[index];
+            return productWidget(product);
+          }),
+        ),
       ),
     );
   }
@@ -81,8 +89,19 @@ class Sample1Page extends StatelessWidget {
                       )),
                     ),
                     Material(
-                      child:
-                          IconButton(icon: Icon(Icons.add_circle_outline, color: Colors.white,), onPressed: () {}),
+                      child: ScopedModelDescendant(
+                        builder: (context, _, CartModel cartModel) {
+                          return IconButton(
+                              icon: Icon(
+                                Icons.add_circle_outline,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                cartModel.add(product);
+                              });
+                        },
+                        rebuildOnChange: false,
+                      ),
                       color: Colors.transparent,
                     ),
                   ],
@@ -94,4 +113,5 @@ class Sample1Page extends StatelessWidget {
       ),
     );
   }
+
 }
