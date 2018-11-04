@@ -21,7 +21,7 @@ final myColors = [
 
 final List<Product> products = List.generate(14, (index) {
   return new Product(
-      'Product $index', new Random().nextInt(30), myColors[index]);
+      'Product ${index + 1}', new Random().nextInt(30), myColors[index]);
 });
 
 class Sample1Page extends StatelessWidget {
@@ -54,9 +54,39 @@ class Sample1Page extends StatelessWidget {
             child: Text(
               product.name,
               style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24.0,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24.0,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              width: double.infinity,
+              height: 40.0,
+              child: Container(
+                color: Colors.black12,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Expanded(
+                      child: Center(
+                          child: Text(
+                        '${product.price} \$',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.0,
+                        ),
+                      )),
+                    ),
+                    Material(
+                      child:
+                          IconButton(icon: Icon(Icons.add_circle_outline, color: Colors.white,), onPressed: () {}),
+                      color: Colors.transparent,
+                    ),
+                  ],
+                ),
               ),
             ),
           )
